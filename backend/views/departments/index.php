@@ -26,11 +26,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
           //  'department_id',
 
-            // 'companies_company_id',// Replace company_id with company_name
-            'companiesCompany.company_name', // getCompaniesCompany in Departments model
+            // 'companies_company_id',// 1- Replace company_id with company_name
+           // 'companiesCompany.company_name', // 2- getCompaniesCompany in Departments model
+            [
+                'attribute' => 'companies_company_id',  // 3-  companies_company_id in attributeLbels in Branches.php Models
+                'value' => 'companiesCompany.company_name',// Replace companiesCompany.company_name with this array For Searching Related Table Data From the GridView
+            ],
 
-            // 'branches_branch_id', // Replace branch_id with branch_name
-            'branchesBranch.branch_name',  // getBranchesBranch in Departments model
+
+
+            // 'branches_branch_id', // 1- Replace branch_id with branch_name
+            //'branchesBranch.branch_name',  // 2- getBranchesBranch in Departments model
+            [
+                'attribute' => 'branches_branch_id',  // 3-  branches_branch_id in attributeLbels in Departments.php Models
+                'value' => 'branchesBranch.branch_name',// Replace branchesBranch.branch_name with this array For Searching Related Table Data From the GridView
+            ],
 
             'department_name',
             'department_created_date',

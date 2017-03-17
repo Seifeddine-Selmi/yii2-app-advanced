@@ -18,8 +18,8 @@ class BranchesSearch extends Branches
     public function rules()
     {
         return [
-            [['branch_id', 'companies_company_id'], 'integer'],
-            [['branch_name', 'branch_address', 'branch_created_date', 'branch_status'], 'safe'],
+            [['branch_id'], 'integer'], // Remove companies_company_id in integer array
+            [['branch_name',  'companies_company_id', 'branch_address', 'branch_created_date', 'branch_status'], 'safe'],
         ];
     }
 
@@ -57,16 +57,21 @@ class BranchesSearch extends Branches
             return $dataProvider;
         }
 
+        // Add join companies for Searching Related Table Data From the GridView
+        $query->joinWith('companiesCompany'); // Name of relation in Branches model getCompaniesCompany
+
         // grid filtering conditions
         $query->andFilterWhere([
             'branch_id' => $this->branch_id,
-            'companies_company_id' => $this->companies_company_id,
+           // 'companies_company_id' => $this->companies_company_id,// Replace to search company name
             'branch_created_date' => $this->branch_created_date,
         ]);
 
+
         $query->andFilterWhere(['like', 'branch_name', $this->branch_name])
             ->andFilterWhere(['like', 'branch_address', $this->branch_address])
-            ->andFilterWhere(['like', 'branch_status', $this->branch_status]);
+            ->andFilterWhere(['like', 'branch_status', $this->branch_status])
+            ->andFilterWhere(['like', 'companies.company_name', $this->companies_company_id]); //'companies' name of join table
 
         return $dataProvider;
     }

@@ -26,8 +26,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
            // 'branch_id',
 
-          //  'companies_company_id',  // Replace company_id with company_name
-            'companiesCompany.company_name', // getCompaniesCompany in Departments model
+           //  'companies_company_id',  // 1- Replace company_id with company_name
+           // 'companiesCompany.company_name', // 2- getCompaniesCompany in Departments model
+            [
+                'attribute' => 'companies_company_id',  //3-  companies_company_id in attributeLbels in Branches.php Models
+                'value' => 'companiesCompany.company_name',// Replace companiesCompany.company_name with this array For Searching Related Table Data From the GridView
+            ],
 
             'branch_name',
             'branch_address',

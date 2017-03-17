@@ -15,6 +15,15 @@ use backend\models\Branches;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?php //echo $form->field($model, 'companies_company_id')->dropdownList(Companies::getCompanies()) ?>
+    <?=
+    $form->field($model, 'companies_company_id')->dropdownList(
+        ArrayHelper::map(Companies::find()->all(), 'company_id', 'company_name'),
+        ['prompt' => 'Select Company']
+    )
+    ?>
+
+
     <?php //echo $form->field($model, 'branches_branch_id')->dropdownList(Branches::getBranches()) ?>
     <?=
     $form->field($model, 'branches_branch_id')->dropdownList(
@@ -24,14 +33,6 @@ use backend\models\Branches;
     ?>
 
     <?= $form->field($model, 'department_name')->textInput(['maxlength' => true]) ?>
-
-    <?php //echo $form->field($model, 'companies_company_id')->dropdownList(Companies::getCompanies()) ?>
-    <?=
-    $form->field($model, 'companies_company_id')->dropdownList(
-        ArrayHelper::map(Companies::find()->all(), 'company_id', 'company_name'),
-        ['prompt' => 'Select Company']
-    )
-    ?>
 
     <?= $form->field($model, 'department_status')->dropDownList([ 'active' => 'Active', 'inactive' => 'Inactive', ], ['prompt' => 'Status']) ?>
 
