@@ -71,4 +71,15 @@ class Companies extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Departments::className(), ['companies_company_id' => 'company_id']);
     }
+
+
+    public static function getCompanies()
+    {
+        $companies = Companies::find()->all();
+        $list = array(null=>'Select Company');
+        foreach($companies as $company){
+            $list[$company->company_id] = $company->company_name;
+        }
+        return $list;
+    }
 }

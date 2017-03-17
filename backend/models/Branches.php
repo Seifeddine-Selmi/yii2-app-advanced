@@ -50,7 +50,7 @@ class Branches extends \yii\db\ActiveRecord
     {
         return [
             'branch_id' => 'Branch ID',
-            'companies_company_id' => 'Companies Company ID',
+            'companies_company_id' => 'Company Name',
             'branch_name' => 'Branch Name',
             'branch_address' => 'Branch Address',
             'branch_created_date' => 'Branch Created Date',
@@ -72,5 +72,15 @@ class Branches extends \yii\db\ActiveRecord
     public function getDepartments()
     {
         return $this->hasMany(Departments::className(), ['branches_branch_id' => 'branch_id']);
+    }
+
+    public static function getBranches()
+    {
+        $branches = Branches::find()->all();
+        $list = array(null=>'Select Branch');
+        foreach($branches as $branch){
+            $list[$branch->branch_id] = $branch->branch_name;
+        }
+        return $list;
     }
 }
