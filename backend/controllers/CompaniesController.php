@@ -8,6 +8,7 @@ use backend\models\CompaniesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * CompaniesController implements the CRUD actions for Companies model.
@@ -67,10 +68,31 @@ class CompaniesController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $model->company_created_date = date('Y-m-d h:m:s');
-            $model->save();
+            // get the instance of the upload file
+            $imageFile = UploadedFile::getInstance($model, 'imageFile');
 
-            return $this->redirect(['view', 'id' => $model->company_id]);
+            $imageName = $model->company_name;
+            if (!empty($imageFile)){
+                $imageFile->saveAs('uploads/' . $imageName . '.' . $imageFile->extension);  // create uploads folder in advanced backend web folder
+
+                //save the path in the logo column in database
+                $model->company_logo = 'uploads/'. $imageName . '.' . $imageFile->extension;
+
+            }
+
+            $model->company_created_date = date('Y-m-d h:m:s');
+
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->company_id]);
+            }else{
+                var_dump($model->getErrors());
+                exit;
+            }
+
+
+
+
+
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -88,8 +110,28 @@ class CompaniesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->company_id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            // get the instance of the upload file
+            $imageFile = UploadedFile::getInstance($model, 'imageFile');
+
+            $imageName = $model->company_name;
+            if (!empty($imageFile)){
+                $imageFile->saveAs('uploads/' . $imageName . '.' . $imageFile->extension);  // create uploads folder in advanced backend web folder
+
+                //save the path in the logo column in database
+                $model->company_logo = 'uploads/'. $imageName . '.' . $imageFile->extension;
+
+            }
+
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->company_id]);
+            }else{
+                var_dump($model->getErrors());
+                exit;
+            }
+
+
         } else {
             return $this->render('update', [
                 'model' => $model,

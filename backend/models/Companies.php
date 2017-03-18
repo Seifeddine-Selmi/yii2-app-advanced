@@ -20,6 +20,9 @@ use Yii;
  */
 class Companies extends \yii\db\ActiveRecord
 {
+
+    public $imageFile;
+
     /**
      * @inheritdoc
      */
@@ -38,8 +41,10 @@ class Companies extends \yii\db\ActiveRecord
             [['company_created_date'], 'safe'],
             [['company_start_date'], 'safe'],
             [['company_status'], 'string'],
-            [['company_name', 'company_email'], 'string', 'max' => 100],
+            [['company_name', 'company_email', 'company_logo'], 'string', 'max' => 100],
             [['company_address'], 'string', 'max' => 255],
+            // File variable
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'jpg, gif, png'],
         ];
     }
 
@@ -56,6 +61,7 @@ class Companies extends \yii\db\ActiveRecord
             'company_created_date' => 'Company Created Date',
             'company_status' => 'Company Status',
             'company_start_date' => 'Company Start Date',
+            'imageFile' => 'Logo',
         ];
     }
 
