@@ -37,6 +37,16 @@ AppAsset::register($this);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
     ];
+
+    // Role-based Access Control (rbac)
+    if (Yii::$app->user->can('permission_admin')) {
+        $menuItems[] = ['label' => 'Assignments', 'url' => ['/admin/assignment']];
+        $menuItems[] = ['label' => 'Permissions', 'url' => ['/admin/permission']];
+        $menuItems[] = ['label' => 'Roles', 'url' => ['/admin/role']];
+        $menuItems[] = ['label' => 'Rules', 'url' => ['/admin/rule']];
+    }
+
+
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
@@ -49,6 +59,7 @@ AppAsset::register($this);
             . Html::endForm()
             . '</li>';
     }
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,

@@ -16,6 +16,16 @@ return [
         'settings' => [
             'class' => 'backend\modules\settings\Settings',
         ],
+        'admin' => [
+            'class' => 'mdm\admin\Module',
+        ],
+    ],
+    'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+            'site/*',
+           //'admin/*',
+        ]
     ],
     'components' => [
         'request' => [
@@ -38,6 +48,10 @@ return [
                     'levels' => ['error', 'warning'],
                 ],
             ],
+        ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            'defaultRoles' => ['guest'],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
