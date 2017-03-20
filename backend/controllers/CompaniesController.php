@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\web\ForbiddenHttpException;
 
 /**
  * CompaniesController implements the CRUD actions for Companies model.
@@ -64,40 +65,43 @@ class CompaniesController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Companies();
+        if (Yii::$app->user->can('create-company')) {
+            $model = new Companies();
 
-        if ($model->load(Yii::$app->request->post())) {
+            if ($model->load(Yii::$app->request->post())) {
 
-            // get the instance of the upload file
-            $imageFile = UploadedFile::getInstance($model, 'imageFile');
+                // get the instance of the upload file
+                $imageFile = UploadedFile::getInstance($model, 'imageFile');
 
-            $imageName = $model->company_name;
-            if (!empty($imageFile)){
-                $imageFile->saveAs('uploads/' . $imageName . '.' . $imageFile->extension);  // create uploads folder in advanced backend web folder
+                $imageName = $model->company_name;
+                if (!empty($imageFile)){
+                    $imageFile->saveAs('uploads/' . $imageName . '.' . $imageFile->extension);  // create uploads folder in advanced backend web folder
 
-                //save the path in the logo column in database
-                $model->company_logo = 'uploads/'. $imageName . '.' . $imageFile->extension;
+                    //save the path in the logo column in database
+                    $model->company_logo = 'uploads/'. $imageName . '.' . $imageFile->extension;
 
+                }
+
+                $model->company_created_date = date('Y-m-d h:m:s');
+
+                if($model->save()){
+                    return $this->redirect(['view', 'id' => $model->company_id]);
+                }else{
+                    var_dump($model->getErrors());
+                    exit;
+                }
+
+
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
             }
-
-            $model->company_created_date = date('Y-m-d h:m:s');
-
-            if($model->save()){
-                return $this->redirect(['view', 'id' => $model->company_id]);
-            }else{
-                var_dump($model->getErrors());
-                exit;
-            }
-
-
-
-
-
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        }else{
+            throw new ForbiddenHttpException;
         }
+
+
     }
 
     /**
