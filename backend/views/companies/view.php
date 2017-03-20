@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'company_logo',
                 'value' => function($model){
-                    return ($model->company_logo) ? Html::img($model->company_logo, ['width'=>'100','height'=>'100', 'alt' => 'My logo']) : false;
+                    return ($model->company_logo) ? Html::img($model->company_logo, ['width'=>'100','height'=>'100', 'alt' => $model->company_name]) : false;
                 },
                 'format'=>'raw',
             ],
