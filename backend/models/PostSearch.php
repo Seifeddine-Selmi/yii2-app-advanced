@@ -18,8 +18,8 @@ class PostSearch extends Post
     public function rules()
     {
         return [
-            [['id', 'author_id'], 'integer'],
-            [['title', 'body'], 'safe'],
+            [['id'], 'integer'],
+            [['title', 'body', 'author_id'], 'safe'],
         ];
     }
 
@@ -57,14 +57,18 @@ class PostSearch extends Post
             return $dataProvider;
         }
 
+        // Add join user for Searching Related Table Data From the GridView
+        $query->joinWith('author'); // Name of relation in Post model getAuthor
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'author_id' => $this->author_id,
+           // 'author_id' => $this->author_id,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'body', $this->body]);
+            ->andFilterWhere(['like', 'body', $this->body])
+            ->andFilterWhere(['like', 'user.username', $this->author_id]);
 
         return $dataProvider;
     }
