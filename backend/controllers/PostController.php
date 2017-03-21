@@ -24,14 +24,32 @@ class PostController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update'],
                 'rules' => [
-                    // allow authenticated users
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'actions' => ['index'],
+                        'roles' => ['managePost'],
                     ],
-                    // everything else is denied
+                    [
+                        'allow' => true,
+                        'actions' => ['view'],
+                        'roles' => ['viewPost'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'roles' => ['createPost'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update'],
+                        'roles' => ['updatePost'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['delete'],
+                        'roles' => ['deletePost'],
+                    ],
                 ],
             ],
             'verbs' => [
