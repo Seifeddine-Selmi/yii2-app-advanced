@@ -22,7 +22,7 @@ class PostController extends Controller
     {
         return [
             'access' => [
-                'class' => \yii\filters\AccessControl::className(),
+                'class' => AccessControl::className(),
                 'only' => ['create', 'update'],
                 'rules' => [
                     // allow authenticated users
