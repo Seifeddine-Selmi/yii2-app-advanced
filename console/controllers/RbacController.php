@@ -4,6 +4,7 @@ namespace console\controllers;
 
 use Yii;
 use yii\console\Controller;
+use common\rbac\AuthorRule;
 
 class RbacController extends Controller
 {
@@ -37,5 +38,31 @@ class RbacController extends Controller
         // usually implemented in your User model.
         $auth->assign($author, 2);
         $auth->assign($admin, 1);
+
+
+    }
+
+    public function actionRule()
+    {
+        $auth = Yii::$app->authManager;
+
+        // add the rule
+        $rule = new AuthorRule;
+        $auth->add($rule);
+
+        $updatePost = $auth->getPermission('updatePost');
+        $author = $auth->getRole('author');
+
+        // add the "updateOwnPost" permission and associate the rule with it.
+        $updateOwnPost = $auth->createPermission('updateOwnPost');
+        $updateOwnPost->description = 'Update own post';
+        $updateOwnPost->ruleName = $rule->name;
+        $auth->add($updateOwnPost);
+
+        // "updateOwnPost" will be used from "updatePost"
+        $auth->addChild($updateOwnPost, $updatePost);
+
+        // allow "author" to update their own posts
+        $auth->addChild($author, $updateOwnPost);
     }
 }
