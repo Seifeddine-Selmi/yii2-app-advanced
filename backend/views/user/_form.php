@@ -21,9 +21,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'password_hash')->passwordInput()->label('Password')  ?>
+
     <?= $form->field($model, 'role')->dropDownList([ 10 => 'User', 20 => 'Moderator', 30 => 'Admin'], ['prompt' => 'Role']) ?>
 
     <?= $form->field($model, 'status')->dropDownList([ 10 => 'Active', 0 => 'Inactive', ], ['prompt' => 'Status']) ?>
+
 
 
     <?php //echo  $form->field($model, 'password_hash')->textInput(['maxlength' => true]) ?>
