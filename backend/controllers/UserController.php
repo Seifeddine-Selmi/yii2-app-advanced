@@ -125,12 +125,17 @@ class UserController extends Controller
             $authorRole = $auth->getRole('author');
             $auth->assign($authorRole, $model->getId());
 
-            $model->save();
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'The user was successfully created.');
+            }else{
+                Yii::$app->session->setFlash('error', 'There was an error creating the user.');
+            }
 
+            return $this->redirect(['index']);
+           // return $this->redirect(['view', 'id' => $model->id]);
 
-            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }

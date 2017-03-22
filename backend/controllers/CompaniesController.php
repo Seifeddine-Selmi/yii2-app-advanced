@@ -85,15 +85,16 @@ class CompaniesController extends Controller
                 $model->company_created_date = date('Y-m-d h:m:s');
 
                 if($model->save()){
-                    return $this->redirect(['view', 'id' => $model->company_id]);
+                    Yii::$app->session->setFlash('success', 'The company was successfully created.');
                 }else{
-                    var_dump($model->getErrors());
-                    exit;
+                    Yii::$app->session->setFlash('error', 'There was an error creating the company.');
                 }
 
+                return $this->redirect(['index']);
+                //return $this->redirect(['view', 'id' => $model->company_id]);
 
             } else {
-                return $this->render('create', [
+                return $this->renderAjax('create', [
                     'model' => $model,
                 ]);
             }

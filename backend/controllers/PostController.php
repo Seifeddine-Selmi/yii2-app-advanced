@@ -101,11 +101,18 @@ class PostController extends Controller
             if ($model->load(Yii::$app->request->post())) {
 
                 $model->author_id = Yii::$app->user->id;
-                $model->save();
 
-                return $this->redirect(['view', 'id' => $model->id]);
+                if($model->save()){
+                    Yii::$app->session->setFlash('success', 'The post was successfully created.');
+                }else{
+                    Yii::$app->session->setFlash('error', 'There was an error creating the post.');
+                }
+
+                return $this->redirect(['index']);
+                //return $this->redirect(['view', 'id' => $model->id]);
+
             } else {
-                return $this->render('create', [
+                return $this->renderAjax('create', [
                     'model' => $model,
                 ]);
             }

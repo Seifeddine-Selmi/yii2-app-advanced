@@ -44,6 +44,7 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Roles', 'url' => ['/admin/role']];
         $menuItems[] = ['label' => 'Permissions', 'url' => ['/admin/permission']];
         $menuItems[] = ['label' => 'Rules', 'url' => ['/admin/rule']];
+        $menuItems[] = ['label' => 'Users', 'url' => ['/user']];
     }
 
 

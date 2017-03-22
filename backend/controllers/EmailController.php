@@ -105,10 +105,12 @@ class EmailController extends Controller
             }else{
                 Yii::$app->session->setFlash('error', 'There was an error sending your message.');
             }
-            return $this->refresh();
+
+            return $this->redirect(['index']);
+            // return $this->refresh();
             //return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }

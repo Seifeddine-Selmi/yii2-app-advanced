@@ -68,11 +68,17 @@ class DepartmentsController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             $model->department_created_date = date('Y-m-d h:m:s');
-            $model->save();
 
-            return $this->redirect(['view', 'id' => $model->department_id]);
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'The department was successfully created.');
+            }else{
+                Yii::$app->session->setFlash('error', 'There was an error creating the department.');
+            }
+
+            return $this->redirect(['index']);
+            //return $this->redirect(['view', 'id' => $model->department_id]);
         } else {
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }

@@ -70,7 +70,12 @@ class BranchesController extends Controller
             if ($model->load(Yii::$app->request->post())) {
 
                 $model->branch_created_date = date('Y-m-d h:m:s');
-                $model->save();
+
+                if($model->save()){
+                    Yii::$app->session->setFlash('success', 'The branch was successfully created.');
+                }else{
+                    Yii::$app->session->setFlash('error', 'There was an error creating the branch.');
+                }
 
                 return $this->redirect(['index']);
                 //return $this->redirect(['view', 'id' => $model->branch_id]);
