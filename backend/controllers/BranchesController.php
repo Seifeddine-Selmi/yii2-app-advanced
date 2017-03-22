@@ -131,4 +131,25 @@ class BranchesController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    /*
+     * Creating a Dependent Drop Down Lists
+     */
+    public function actionLists($id)
+    {
+
+        $branches = Branches::find()
+            ->where(['companies_company_id' => $id])
+            ->all();
+
+        if (!empty($branches)) {
+            foreach($branches as $branch){
+                echo "<option value='".$branch->branch_id."'>".$branch->branch_name."</option>";
+            }
+        }
+        else{
+            echo "<option value='0'>-</option>";
+        }
+
+    }
 }

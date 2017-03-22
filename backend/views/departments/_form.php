@@ -19,7 +19,14 @@ use backend\models\Branches;
     <?=
     $form->field($model, 'companies_company_id')->dropdownList(
         ArrayHelper::map(Companies::find()->all(), 'company_id', 'company_name'),
-        ['prompt' => 'Select Company']
+        [
+            'prompt' => 'Select Company',
+            'onchange'=>'
+                $.post( "index.php?r=branches/lists&id='.'"+$(this).val(), function( data ) {
+
+                  $( "select#departments-branches_branch_id" ).html( data );
+                });'
+        ]
     )
     ?>
 
