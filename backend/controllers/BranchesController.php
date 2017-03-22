@@ -72,9 +72,10 @@ class BranchesController extends Controller
                 $model->branch_created_date = date('Y-m-d h:m:s');
                 $model->save();
 
-                return $this->redirect(['view', 'id' => $model->branch_id]);
+                return $this->redirect(['index']);
+                //return $this->redirect(['view', 'id' => $model->branch_id]);
             } else {
-                return $this->render('create', [
+                return $this->renderAjax('create', [
                     'model' => $model,
                 ]);
             }
