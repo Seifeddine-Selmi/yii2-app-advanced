@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\User */
+/* @var $model backend\models\User */
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
@@ -28,17 +28,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+          //  'id',
             'username',
-            'auth_key',
-            'password_hash',
-            'password_reset_token',
-            'email:email',
-            'status',
-            'created_at',
-            'updated_at',
             'first_name',
             'last_name',
+
+            'email:email',
+            //    'role',
+            [
+                'attribute' => 'role',
+                'value'=> function ($model) {
+                    if($model->role == 10) {
+                        return 'User';
+                    }else if($model->role == 20){
+                        return 'Moderator';
+                    } else{
+                        return 'Admin';
+                    }
+                },
+            ],
+            // 'status',
+            [
+                'attribute' => 'status',
+                'value' => $model->status == 10 ? 'Active' : 'Inactive',
+            ],
+            'created_at:datetime',
+            'updated_at:datetime',
+
+            //  'auth_key',
+            //   'password_hash',
+            //  'password_reset_token',
+
+
         ],
     ]) ?>
 

@@ -12,6 +12,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use backend\models\User as UserBackend;
 
 /**
  * Site controller
@@ -26,7 +27,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'about'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -37,6 +38,14 @@ class SiteController extends Controller
                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['about'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                       /* 'matchCallback' => function ($rule, $action) {
+                            return UserBackend::isUser(Yii::$app->user->identity->username);
+                        }*/
                     ],
                 ],
             ],
@@ -88,6 +97,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+      //  if ($model->load(Yii::$app->request->post()) && $model->loginUser()) {
             return $this->goBack();
         } else {
             return $this->render('login', [

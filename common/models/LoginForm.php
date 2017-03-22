@@ -3,6 +3,7 @@ namespace common\models;
 
 use Yii;
 use yii\base\Model;
+use backend\models\User as UserBackend;
 
 /**
  * Login form
@@ -62,6 +63,24 @@ class LoginForm extends Model
         }
     }
 
+    public function loginAdmin()
+    {
+        if ($this->validate() && UserBackend::isAdmin($this->username)) {
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        } else {
+            return false;
+        }
+    }
+
+    public function loginUser()
+    {
+        if ($this->validate() && UserBackend::isUser($this->username)) {
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Finds user by [[username]]
      *
@@ -75,4 +94,5 @@ class LoginForm extends Model
 
         return $this->_user;
     }
+
 }
