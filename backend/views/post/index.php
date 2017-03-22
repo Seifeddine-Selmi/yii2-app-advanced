@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>'author.username'
             ],
             'title',
-            'body:ntext',
+            'body:html',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
