@@ -39,7 +39,7 @@ AppAsset::register($this);
     ];
 
     // Role-based Access Control (rbac)
-    if (Yii::$app->user->can('permission_admin')) {
+    if (Yii::$app->user->can('admin')) {
         $menuItems[] = ['label' => 'Assignments', 'url' => ['/admin/assignment']];
         $menuItems[] = ['label' => 'Roles', 'url' => ['/admin/role']];
         $menuItems[] = ['label' => 'Permissions', 'url' => ['/admin/permission']];

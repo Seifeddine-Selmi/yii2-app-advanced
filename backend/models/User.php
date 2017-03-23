@@ -22,7 +22,6 @@ use Yii;
  *
  * @property Post[] $posts
  */
-//class User extends \yii\db\ActiveRecord
 class User extends \common\models\User
 {
     const STATUS_DELETED = 0;
@@ -31,6 +30,9 @@ class User extends \common\models\User
     const ROLE_USER = 10;
     const ROLE_MODERATOR = 20;
     const ROLE_ADMIN = 30;
+
+    public $password;
+    public $permissions;
 
     /**
      * @inheritdoc

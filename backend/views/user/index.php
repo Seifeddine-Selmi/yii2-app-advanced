@@ -48,10 +48,10 @@ $this->params['breadcrumbs'][] = $this->title;
              'first_name',
              'last_name',
          //    'role',
-            [
+            /*[
                 'attribute' => 'role',
                 'value' => 'roleLabel',
-            ],
+            ],*/
             // 'status',
             [
                 'attribute' => 'status',

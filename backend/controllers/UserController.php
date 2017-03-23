@@ -10,8 +10,9 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\components\AccessRule;
 //use common\models\User as UserCommon;
-//use backend\models\User;
 use backend\models\User;
+use backend\models\AuthAssignment;
+use backend\models\AuthItem;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -19,9 +20,58 @@ use backend\models\User;
 class UserController extends Controller
 {
     /**
+     * Example rules with rbac
      * @inheritdoc
      */
     public function behaviors()
+    {
+        return [
+
+
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => [
+                            'sysadmin',
+                            'admin',
+                        ],
+                    ],
+                    [
+                        'actions' => ['update'],
+                        'allow' => true,
+                        'roles' => [
+                            'sysadmin',
+                            'admin',
+
+                        ],
+                    ],
+                    [
+                        'actions' => ['delete'],
+                        'allow' => true,
+                        'roles' => [
+                            'sysadmin'
+                        ],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Example rules without rbac
+     * @inheritdoc
+     */
+  /*  public function behaviorsWithoutRbac()
     {
         return [
 
@@ -71,6 +121,7 @@ class UserController extends Controller
             ],
         ];
     }
+  */
 
     /**
      * Lists all User models.
@@ -108,22 +159,41 @@ class UserController extends Controller
     {
         $model = new User();
 
+        $authItems = AuthItem::find()->where(['type' => 1])->all();
+
         if ($model->load(Yii::$app->request->post())) {
 
 
             $POST_VARIABLE=Yii::$app->request->post('User');
 
-            $password = $POST_VARIABLE['password_hash'];
+            $password = $POST_VARIABLE['password'];
 
             $model->setPassword($password);
             $model->generateAuthKey();
 
             $model->save(false);
 
-            // the following three lines were added:
+          /*  // the following three lines were added:
             $auth = Yii::$app->authManager;
             $authorRole = $auth->getRole('author');
             $auth->assign($authorRole, $model->getId());
+         */
+
+            // lets add the permissions
+            $permissionList = $_POST['User']['permissions'];
+            if(!empty($permissionList)){
+
+                foreach ($permissionList as $permission)
+                {
+                    $newPermission = new AuthAssignment;
+                    $newPermission->user_id = (string)$model->getId();
+                    $newPermission->item_name = $permission;
+                    $newPermission->created_at = time();
+                    $newPermission->save();
+
+                }
+            }
+
 
             if($model->save()){
                 Yii::$app->session->setFlash('success', 'The user was successfully created.');
@@ -132,11 +202,13 @@ class UserController extends Controller
             }
 
             return $this->redirect(['index']);
-           // return $this->redirect(['view', 'id' => $model->id]);
 
+
+           // return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->renderAjax('create', [
                 'model' => $model,
+                'authItems'=> $authItems,
             ]);
         }
     }
@@ -151,11 +223,47 @@ class UserController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $authItems = AuthItem::find()->where(['type' => 1])->all();
+
+        if ($model->load(Yii::$app->request->post())) {
+
+
+            $POST_VARIABLE=Yii::$app->request->post('User');
+
+            $password = $POST_VARIABLE['password'];
+
+            $model->setPassword($password);
+            $model->generateAuthKey();
+
+            $model->save(false);
+
+            // lets add the permissions
+            $permissionList = $_POST['User']['permissions'];
+
+            if(!empty($permissionList)){
+                foreach ($permissionList as $permission)
+                {
+                    $newPermission = new AuthAssignment;
+                    $newPermission->user_id = (string)$model->getId();
+                    $newPermission->item_name = $permission;
+                    $newPermission->created_at = time();
+                    $newPermission->save();
+
+                }
+            }
+
+
+
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'The user was successfully updated.');
+            }else{
+                Yii::$app->session->setFlash('error', 'There was an error updating the user.');
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'authItems'=> $authItems,
             ]);
         }
     }

@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'email:email',
             //    'role',
-            [
+           /* [
                 'attribute' => 'role',
                 'value'=> function ($model) {
                     if($model->role == 10) {
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return 'Admin';
                     }
                 },
-            ],
+            ],*/
             // 'status',
             [
                 'attribute' => 'status',

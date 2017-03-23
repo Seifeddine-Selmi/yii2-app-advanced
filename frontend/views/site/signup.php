@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= $form->field($model, 'password')->passwordInput() ?>
 
-                <?php $authItems = ArrayHelper::map($authItems,'name','name'); ?>
-                <?= $form->field($model,'permissions')->checkboxList($authItems,['class'=>'form-inline'])->label(false); ?>
+                <?php //$authItems = ArrayHelper::map($authItems,'name','name'); ?>
+                <?php //echo $form->field($model,'permissions')->checkboxList($authItems,['class'=>'form-inline'])->label(false); ?>
 
                 <div class="form-group">
                     <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>

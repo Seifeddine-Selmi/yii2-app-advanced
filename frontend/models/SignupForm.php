@@ -75,22 +75,25 @@ class SignupForm extends Model
         $authorRole = $auth->getRole('author');
         $auth->assign($authorRole, $user->getId());
       */
-
+     /*
         // lets add the permissions
         $permissionList = $_POST['SignupForm']['permissions'];
 
-        foreach ($permissionList as $permission)
-        {
-            $newPermission = new AuthAssignment;
-            $newPermission->user_id = (string)$user->id;
-            $newPermission->item_name = $permission;
-            $newPermission->created_at = time();
-            $newPermission->save();
+        if(!empty($permissionList)){
+            foreach ($permissionList as $permission)
+            {
+                $newPermission = new AuthAssignment;
+                $newPermission->user_id = (string)$user->id;
+                $newPermission->item_name = $permission;
+                $newPermission->created_at = time();
+                $newPermission->save();
+
+            }
 
         }
+        */
 
 
-        
         return $user->save() ? $user : null;
     }
 }
