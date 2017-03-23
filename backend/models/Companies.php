@@ -45,7 +45,21 @@ class Companies extends \yii\db\ActiveRecord
             [['company_address'], 'string', 'max' => 255],
             // File variable
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'jpg, gif, png'],
+            // Custom rule
+            [['company_start_date'], 'required'],
+            ['company_start_date','checkDate'],
         ];
+    }
+
+    public function checkDate($attribute,$params)
+    {
+        $today = date('Y-m-d');
+        $selectedDate = date($this->company_start_date);
+
+        if(strtotime($selectedDate) > strtotime($today))
+        {
+            $this->addError($attribute,'Company Start Date Must be Smaller than today');
+        }
     }
 
     /**

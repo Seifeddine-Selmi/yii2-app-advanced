@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\web\ForbiddenHttpException;
+use yii\widgets\ActiveForm;
 
 /**
  * CompaniesController implements the CRUD actions for Companies model.
@@ -67,6 +68,13 @@ class CompaniesController extends Controller
     {
         if (Yii::$app->user->can('create-company')) {
             $model = new Companies();
+
+            // Validate with custom rule checkDate
+            if (Yii::$app->request->isAjax && $model->load($_POST))
+            {
+                Yii::$app->response->format = 'json';
+                return ActiveForm::validate($model);
+            }
 
             if ($model->load(Yii::$app->request->post())) {
 
