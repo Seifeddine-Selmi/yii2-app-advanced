@@ -36,6 +36,15 @@ use dosamigos\datepicker\DatePicker;
 
     <?= $form->field($model, 'imageFile')->fileInput() ?>
 
+
+    <!-- Create Branch For this company   -->
+
+    <?= $form->field($branch, 'branch_name')->textInput(['maxlength' => 100]) ?>
+
+    <?= $form->field($branch, 'branch_address')->textInput(['maxlength' => 255]) ?>
+
+    <?= $form->field($branch, 'branch_status')->dropDownList([ 'active' => 'Active', 'inactive' => 'Inactive', ], ['prompt' => 'Status']) ?>
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
