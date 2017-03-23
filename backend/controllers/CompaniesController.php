@@ -69,6 +69,54 @@ class CompaniesController extends Controller
     {
         if (Yii::$app->user->can('create-company')) {
             $model = new Companies();
+
+            // Validate with custom rule checkDate
+            if (Yii::$app->request->isAjax && $model->load($_POST))
+            {
+                Yii::$app->response->format = 'json';
+                return ActiveForm::validate($model);
+            }
+
+            if ($model->load(Yii::$app->request->post())) {
+
+                // get the instance of the upload file
+                $imageFile = UploadedFile::getInstance($model, 'imageFile');
+
+                $imageName = $model->company_name;
+                if (!empty($imageFile)){
+                    $imageFile->saveAs('uploads/' . $imageName . '.' . $imageFile->extension);  // create uploads folder in advanced backend web folder
+
+                    //save the path in the logo column in database
+                    $model->company_logo = 'uploads/'. $imageName . '.' . $imageFile->extension;
+
+                }
+
+                $model->company_created_date = date('Y-m-d h:m:s');
+
+                if($model->save()){
+                    Yii::$app->session->setFlash('success', 'The company was successfully created.');
+                }else{
+                    Yii::$app->session->setFlash('error', 'There was an error creating the company.');
+                }
+
+                return $this->redirect(['index']);
+                //return $this->redirect(['view', 'id' => $model->company_id]);
+
+            } else {
+                return $this->renderAjax('create', [
+                    'model' => $model,
+                ]);
+            }
+        }else{
+            throw new ForbiddenHttpException;
+        }
+
+
+    }
+    public function actionCreateWithBranch()
+    {
+        if (Yii::$app->user->can('create-company')) {
+            $model = new Companies();
             $branch = new Branches();
 
             // Validate with custom rule checkDate
@@ -116,7 +164,7 @@ class CompaniesController extends Controller
                 //return $this->redirect(['view', 'id' => $model->company_id]);
 
             } else {
-                return $this->renderAjax('create', [
+                return $this->render('create_with_branch', [
                     'model' => $model,
                     'branch'=> $branch,
                 ]);
@@ -137,6 +185,13 @@ class CompaniesController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
+        // Validate with custom rule checkDate
+        if (Yii::$app->request->isAjax && $model->load($_POST))
+        {
+            Yii::$app->response->format = 'json';
+            return ActiveForm::validate($model);
+        }
 
         if ($model->load(Yii::$app->request->post())) {
 
