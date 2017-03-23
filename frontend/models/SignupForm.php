@@ -4,6 +4,7 @@ namespace frontend\models;
 use yii\base\Model;
 use common\models\User;
 use Yii;
+use backend\models\AuthAssignment;
 
 /**
  * Signup form
@@ -15,6 +16,7 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
+    public $permissions;
 
 
     /**
@@ -64,10 +66,29 @@ class SignupForm extends Model
 
         $user->save(false);
 
+      /*
+        // add permession author by default
+
+
         // the following three lines were added:
         $auth = Yii::$app->authManager;
         $authorRole = $auth->getRole('author');
         $auth->assign($authorRole, $user->getId());
+      */
+
+        // lets add the permissions
+        $permissionList = $_POST['SignupForm']['permissions'];
+
+        foreach ($permissionList as $permission)
+        {
+            $newPermission = new AuthAssignment;
+            $newPermission->user_id = (string)$user->id;
+            $newPermission->item_name = $permission;
+            $newPermission->created_at = time();
+            $newPermission->save();
+
+        }
+
 
         
         return $user->save() ? $user : null;
