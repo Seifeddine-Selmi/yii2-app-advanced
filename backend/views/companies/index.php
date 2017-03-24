@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="companies-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?php // echo Html::a('Create Companies', ['create'], ['class' => 'btn btn-success']) ?>
