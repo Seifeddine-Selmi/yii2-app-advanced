@@ -13,6 +13,9 @@ return [
     'bootstrap' => ['log'],
     // Create new custom module
     'modules' => [
+        'gridview' =>  [
+            'class' => '\kartik\grid\Module',
+        ],
         'settings' => [
             'class' => 'backend\modules\settings\Settings',
         ],

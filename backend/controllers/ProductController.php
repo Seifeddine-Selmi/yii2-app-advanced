@@ -203,11 +203,13 @@ class ProductController extends Controller
         $product_no = $model->product_no;
 
         $modelsProductItem = $model->productItems;
-        foreach ($modelsProductItem as $modelProductItem)
-        {
-            $modelProductItem->delete();
+
+        if (!empty($modelsProductItem)){
+            foreach ($modelsProductItem as $modelProductItem)
+            {
+                $modelProductItem->delete();
+            }
         }
-        
 
         if ($model->delete()) {
             Yii::$app->session->setFlash('success', 'Product  <strong>"' . $product_no . '"</strong> deleted successfully.');
