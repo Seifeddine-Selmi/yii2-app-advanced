@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
+use yii\web\Response;
 
 /**
  * BranchesController implements the CRUD actions for Branches model.
@@ -71,14 +72,25 @@ class BranchesController extends Controller
 
                 $model->branch_created_date = date('Y-m-d h:m:s');
 
-                if($model->save()){
-                    Yii::$app->session->setFlash('success', 'The branch was successfully created.');
-                }else{
-                    Yii::$app->session->setFlash('error', 'There was an error creating the branch.');
-                }
+                    Yii::$app->response->format = Response::FORMAT_JSON;
+                    if($model->save()){
+                        // Yii::$app->session->setFlash('success', 'The branch was successfully created.');
+                       //  echo 'Success';
+                        return [
+                            'message' => 'Success',
+                        ];
 
-                return $this->redirect(['index']);
-                //return $this->redirect(['view', 'id' => $model->branch_id]);
+                    }else{
+                        // Yii::$app->session->setFlash('error', 'There was an error creating the branch.');
+                         // echo 'Error';
+                       return [
+                            'message' => 'Error',
+                        ];
+                    }
+
+
+               // return $this->redirect(['index']);
+
             } else {
                 return $this->renderAjax('create', [
                     'model' => $model,
