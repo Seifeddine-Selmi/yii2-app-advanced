@@ -86,7 +86,7 @@ class CompaniesSearch extends Companies
 
 
         }
-        
+
 
         return $dataProvider;
     }
