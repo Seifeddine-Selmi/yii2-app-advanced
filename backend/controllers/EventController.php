@@ -101,13 +101,31 @@ class EventController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
-            return $this->render('update', [
+            return $this->renderAjax('update', [
                 'model' => $model,
             ]);
         }
     }
+
+    public function actionUpdateByTitle($title)
+    {
+
+       // $model = Event::findByTitle($title);
+       $model = Event::find()->where(['title'=>$title])->one();
+
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else {
+            return $this->renderAjax('update', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+
 
     /**
      * Deletes an existing Event model.
@@ -136,5 +154,27 @@ class EventController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionJsoncalendar($start=NULL,$end=NULL,$_=NULL){
+
+      //  \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $times = Event::find()->all();
+
+        $events = array();
+
+        foreach ($times AS $time){
+            //Testing
+            $Event = new \yii2fullcalendar\models\Event();
+            $Event->id = $time->id;
+            $Event->title = $time->title;
+            $Event->start = $time->created_date;
+           // $Event->end = $time->end_time;
+            $events[] = $Event;
+        }
+
+        return json_encode($events);
+
     }
 }

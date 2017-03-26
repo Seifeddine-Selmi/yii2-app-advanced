@@ -47,4 +47,15 @@ class Event extends \yii\db\ActiveRecord
             'created_date' => 'Created Date',
         ];
     }
+
+    /**
+     * Finds event by title
+     *
+     * @param string $title
+     * @return static|null
+     */
+    public static function findByTitle($title)
+    {
+        return static::findOne(['title' => $title]);
+    }
 }
