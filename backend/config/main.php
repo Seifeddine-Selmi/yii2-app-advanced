@@ -71,6 +71,10 @@ return [
             ],
         ],
         */
+        // Create custom component
+        'MyComponent'=>[
+            'class'=>'backend\components\MyComponent',
+        ],
     ],
     'params' => $params,
 ];
