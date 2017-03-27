@@ -1,16 +1,15 @@
 <?php
 
-/* @var $this \yii\web\View */
-/* @var $content string */
 
-use backend\assets\AppAsset;
+
+use backend\assets\LoginAsset;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 
-AppAsset::register($this);
+LoginAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -37,7 +36,7 @@ AppAsset::register($this);
     $menuItems = [
         ['label' => 'Login', 'url' => ['/site/login']],
     ];
-    
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,
@@ -46,9 +45,7 @@ AppAsset::register($this);
     ?>
 
     <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
+        <?php //echo Breadcrumbs::widget(['links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
