@@ -20,8 +20,9 @@ LoginAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <?php $this->registerJsFile(Yii::$app->request->baseUrl.'/plugins/jQuery/jquery-2.2.3.min.js'); ?>
 </head>
-<body>
+<body class="login-page">
 <?php $this->beginBody() ?>
 
 <div class="wrap">
