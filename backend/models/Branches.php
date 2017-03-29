@@ -33,14 +33,31 @@ class Branches extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['companies_company_id', 'branch_name', 'branch_address', 'branch_status'], 'required'],
+            [['companies_company_id', 'branch_name'], 'required'],
             [['companies_company_id'], 'integer'],
-            ['branch_name', 'unique'],
             [['branch_created_date'], 'safe'],
             [['branch_status'], 'string'],
             [['branch_name'], 'string', 'max' => 100],
             [['branch_address'], 'string', 'max' => 255],
             [['companies_company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Companies::className(), 'targetAttribute' => ['companies_company_id' => 'company_id']],
+
+            // Ajax Validation
+            ['branch_name', 'unique'],
+
+            // Ajax Validation Condition
+            ['branch_status', 'required',
+                'when'       => function ($model) {
+                    return (!empty($model->branch_address)) ? true:false;
+                },
+                // Validation client javascript
+                'whenClient' => "function() {
+                      if($('#branch_address').val() === undefined){
+                         return false;
+                      }else{
+                         return true;
+                      }
+                  }"
+            ],
         ];
     }
 

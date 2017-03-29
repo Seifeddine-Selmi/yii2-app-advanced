@@ -43,11 +43,15 @@ class Companies extends \yii\db\ActiveRecord
             [['company_status'], 'string'],
             [['company_name', 'company_email', 'company_logo'], 'string', 'max' => 100],
             [['company_address'], 'string', 'max' => 255],
-            // File variable
-            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'jpg, gif, png'],
             // Custom rule
             [['company_start_date'], 'required'],
             ['company_start_date','checkDate'],
+
+            // File variable
+           // [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'jpg, gif, png'],
+            ['imageFile', 'image', 'minWidth' => 250,'minHeight' => 250],
+            // Combine size and extensions
+            // ['imageFile', 'image', 'minWidth' => 250, 'maxWidth' => 250,'minHeight' => 250, 'maxHeight' => 250, 'extensions' => 'jpg, gif, png', 'maxSize' => 1024 * 1024 * 2],
         ];
     }
 
