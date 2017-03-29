@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
+use yii\helpers\Json;
 
 /**
  * BranchesController implements the CRUD actions for Branches model.
@@ -39,6 +40,37 @@ class BranchesController extends Controller
     {
         $searchModel = new BranchesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        // Used by Kartik Grid
+        if (Yii::$app->request->post('hasEditable')) {
+
+            $branchId = Yii::$app->request->post('editableKey');
+            $branch = Branches::findOne($branchId);
+
+            $out = Json::encode(['output' => '','message' => '']);
+            $post = [];
+            $posted = current($_POST['Branches']);
+            $post['Branches'] = $posted;
+
+            if ($branch->load($post)) {
+
+                if ($branch->save()) {
+                    $output = $branch->branch_name;
+
+                }else {
+                    $output = $branch->getErrors();
+                }
+
+               $out = Json::encode(['output' => $output,'message' => '']);
+            }
+
+            return  $out;
+
+        }
+
+
+
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,

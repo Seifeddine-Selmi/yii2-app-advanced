@@ -1,10 +1,11 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+//use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\BranchesSearch */
@@ -36,10 +37,12 @@ $this->params['breadcrumbs'][] = $this->title;
     Modal::end();
     ?>
 
-    <?php Pjax::begin(['id'=>'branchesGrid']); ?>
+    <?php //Pjax::begin(['id'=>'branchesGrid']); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pjax' => true,
+        'export' => false,
         'rowOptions'=>function($model){
             if($model->branch_status == 'inactive')
             {
@@ -61,7 +64,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => 'companiesCompany.company_name',// Replace companiesCompany.company_name with this array For Searching Related Table Data From the GridView
             ],
 
-            'branch_name',
+            //'branch_name',
+            [
+                'class' => 'kartik\grid\EditableColumn',
+                'header' => 'BRANCH',
+                'attribute' => 'branch_name',
+
+            ],
             'branch_address',
             'branch_created_date',
             // 'branch_status',
@@ -69,5 +78,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-    <?php Pjax::end(); ?>
+    <?php //Pjax::end(); ?>
 </div>
