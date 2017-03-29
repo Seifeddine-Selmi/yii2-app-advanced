@@ -6,6 +6,7 @@ use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use kartik\grid\GridView;
+use kartik\export\ExportMenu;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\BranchesSearch */
@@ -37,12 +38,37 @@ $this->params['breadcrumbs'][] = $this->title;
     Modal::end();
     ?>
 
+    <?php
+// Exporting Excel Sheet using Kartik Export Menu Widget
+    $gridColumns = [
+       // 'branch_id',
+        'branch_name',
+        'branch_address',
+        'branch_created_date',
+        'branch_status',
+    ];
+
+    // Renders a export dropdown menu
+    echo ExportMenu::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => $gridColumns,
+       /* 'exportConfig' => [
+            'HTML' => false,
+            'CSV' => false,
+            'TXT' => false,
+            'PDF' => false,
+            'Excel5' => false,
+            'Excel2007'  => false,
+        ],*/
+    ]);
+    ?>
+
     <?php //Pjax::begin(['id'=>'branchesGrid']); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax' => true,
-        'export' => false,
+        //'export' => false,
         'rowOptions'=>function($model){
             if($model->branch_status == 'inactive')
             {
@@ -80,3 +106,14 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <?php //Pjax::end(); ?>
 </div>
+
+<?php
+
+$script = <<< JS
+// Fixed kartik export buttons with dropdown bootstrap adminLTE
+ $(".dropdown-toggle").dropdown();
+
+JS;
+$this->registerJs($script);
+
+?>
