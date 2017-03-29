@@ -12,6 +12,7 @@ use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\helpers\Json;
 use yii\base\Exception;
+use yii\widgets\ActiveForm;
 
 /**
  * BranchesController implements the CRUD actions for Branches model.
@@ -80,9 +81,8 @@ class BranchesController extends Controller
     }
 
     /**
-     * Displays a single Branches model.
-     * @param integer $id
-     * @return mixed
+     * Importing Excel Sheet
+     * Read Excel file and save into database.
      */
     public function actionImportExcel()
     {
@@ -152,6 +152,14 @@ class BranchesController extends Controller
         if (Yii::$app->user->can('create-branch')) {
             $model = new Branches();
 
+            // Validate with enableAjaxValidation is true in _form
+            // Remove this if use 'validationUrl' => Url::toRoute('branches/validation') in _form
+         /*   if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()))
+            {
+                Yii::$app->response->format = 'json';
+                return ActiveForm::validate($model);
+            }*/
+
             if ($model->load(Yii::$app->request->post())) {
 
                 $model->branch_created_date = date('Y-m-d h:m:s');
@@ -184,6 +192,23 @@ class BranchesController extends Controller
             throw new ForbiddenHttpException;
         }
 
+    }
+
+    /*
+     * Call this validation funtion if use validationUrl in _form
+     */
+    public function actionValidation()
+    {
+        $model = new Branches();
+        // Validate with custom rule checkDate
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()))
+        {
+            Yii::$app->response->format = 'json';
+            return ActiveForm::validate($model);
+
+        }else{
+            throw new ForbiddenHttpException;
+        }
     }
 
     /**
