@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\helpers\Json;
+use yii\base\Exception;
 
 /**
  * BranchesController implements the CRUD actions for Branches model.
@@ -76,6 +77,57 @@ class BranchesController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    /**
+     * Displays a single Branches model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionImportExcel()
+    {
+        $inputFile = "uploads/branches_file.xlsx";
+
+        try {
+            // Load the excel file
+            $inputFileType = \PHPExcel_IOFactory::identify($inputFile);
+            $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
+            $objPHPExcel = $objReader->load($inputFile);
+        } catch (Exception $e) {
+           // throw new NotFoundHttpException();
+            die('Error');
+        }
+
+        // Read the excel file and insert data in the database
+        $sheet = $objPHPExcel->getSheet(0);
+        $highestRow = $sheet->getHighestRow();
+        $highestColumn = $sheet->getHighestColumn();
+
+
+        for ($row = 1; $row <= $highestRow; $row++) {
+
+            $rowData = $sheet ->rangeToArray('A'.$row. ':' .$highestColumn.$row, NULL, TRUE, FALSE);
+            if ($row == 1) {
+                continue;
+            }
+
+            $branch = new Branches();
+            $branch ->branch_id            = $rowData[0][0];
+            $branch ->companies_company_id = $rowData[0][1];
+            $branch ->branch_name          = $rowData[0][2];
+            $branch ->branch_address       = $rowData[0][3];
+            $branch ->branch_created_date  = $rowData[0][4];
+            $branch ->branch_status        = $rowData[0][5];
+            if ($branch->save()) {
+                Yii::$app->session->setFlash('success', 'The branch was successfully created.');
+
+            }else {
+                return $branch->getErrors();
+            }
+
+
+        }
+        return 'Success';
     }
 
     /**
