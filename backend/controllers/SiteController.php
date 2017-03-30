@@ -148,6 +148,8 @@ class SiteController extends Controller
     {
         if (isset($_POST["lang"])) {
             Yii::$app->language = $_POST["lang"];
+
+            // Create language cookie
             $cookie = new Cookie([
                 'name' => 'lang',
                 'value' => $_POST["lang"],

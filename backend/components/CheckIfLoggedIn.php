@@ -17,25 +17,29 @@ class CheckIfLoggedIn extends Behavior{
     public function events()
     {
         return [
-            Controller::EVENT_BEFORE_ACTION => 'CheckIfLoggedIn',
-            Application::EVENT_BEFORE_REQUEST => 'ChangeLanguage',
+            Controller::EVENT_BEFORE_ACTION => 'checkIfLoggedIn',
+            Application::EVENT_BEFORE_REQUEST => 'changeLanguage',
         ];
     }
 
 
-    public function CheckIfLoggedIn()
+    /**
+     * On event callback, redirect if user not logged in
+     */
+    public function checkIfLoggedIn()
     {
-
 
         if (Yii::$app->getUser()->isGuest &&
             Yii::$app->getRequest()->url !== Url::to(Yii::$app->getUser()->loginUrl)
         ) {
             Yii::$app->getResponse()->redirect(\Yii::$app->getUser()->loginUrl);
         }
-
     }
 
-    public function ChangeLanguage()
+    /**
+     * On event callback, change language depends to lang in cookies, for every request
+     */
+    public function changeLanguage()
     {
 
         if(Yii::$app->getRequest()->getCookies()->has('lang')){

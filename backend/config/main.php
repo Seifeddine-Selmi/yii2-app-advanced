@@ -11,6 +11,8 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
+    'language' => 'en',
+    'sourceLanguage' => 'en',
     // Create new custom module
     'modules' => [
         'gridview' =>  [
@@ -33,7 +35,9 @@ return [
     'components' => [
         'i18n' => [
             'translations' => [
-                'app' => [
+
+                // PhpMessageSource: Uses files to store message translations.
+               /* 'app' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     //'basePath' => '@app/messages',
                     //'sourceLanguage' => 'en-US',
@@ -42,6 +46,18 @@ return [
                         'app' => 'app.php',
                         'app/error' => 'error.php',
                     ],
+                ],*/
+
+                // DbMessageSource: Uses a database table to store translated messages..
+                'app' => [
+                    'class' => 'yii\i18n\DbMessageSource',
+                    //'basePath' => '@app/messages',
+                    //'sourceLanguage' => 'en-US',
+                    'sourceLanguage' => 'en',
+                   /* 'fileMap' => [
+                        'app' => 'app.php',
+                        'app/error' => 'error.php',
+                    ],*/
                 ],
             ],
         ],
