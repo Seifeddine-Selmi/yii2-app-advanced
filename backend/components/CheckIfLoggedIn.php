@@ -3,9 +3,9 @@
 namespace backend\components;
 
 use Yii;
-use yii\db\ActiveRecord;
 use yii\base\Behavior;
-use yii\web\Application;
+use yii\helpers\Url;
+use yii\console\Controller;
 
 class CheckIfLoggedIn extends Behavior{
 
@@ -16,23 +16,20 @@ class CheckIfLoggedIn extends Behavior{
     public function events()
     {
         return [
-            Application::EVENT_BEFORE_REQUEST => 'CheckIfLoggedIn',
+            Controller::EVENT_BEFORE_ACTION => 'CheckIfLoggedIn'
         ];
     }
 
 
     public function CheckIfLoggedIn(){
-        
-        $url = '';
-        if (Yii::$app->user->isGuest) {
-            echo "You are a guest";
-            //$url = Yii::$app->getResponse()->redirect('http://y2aa-frontend.dev/');
-        }else {
-            echo "You are logged in";
-           // $url = Yii::$app->getResponse()->redirect('http://y2aa-frontend.dev/');
+
+
+        if (Yii::$app->getUser()->isGuest &&
+            Yii::$app->getRequest()->url !== Url::to(Yii::$app->getUser()->loginUrl)
+        ) {
+            Yii::$app->getResponse()->redirect(\Yii::$app->getUser()->loginUrl);
         }
 
-        //return $url;
     }
 
 
