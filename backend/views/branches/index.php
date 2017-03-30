@@ -14,7 +14,18 @@ use kartik\export\ExportMenu;
 
 $this->title = 'Branches';
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->params['menu'] = $this->title;
+
 ?>
+
+<?php $this->beginBlock('notice'); ?>
+
+    <h3>Welcome to branches</h3>
+
+<?php $this->endBlock(); ?>
+
+
 <div class="branches-index">
 
     <h1><?= Html::encode($this->title) ?></h1>

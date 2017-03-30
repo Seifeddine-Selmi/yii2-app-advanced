@@ -607,9 +607,11 @@ DashboardAsset::register($this);
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Dashboard
+                 <?php echo isset($this->params['menu']) ? $this->params['menu'] : ''; ?> Dashboard
                 <small>Control panel</small>
             </h1>
+
+            <?php echo isset($this->blocks['notice']) ? $this->blocks['notice'] : ''; ?>
 
             <div class="languages">
                 <?php foreach(Yii::$app->params['languages'] as $key => $language){ ?>
