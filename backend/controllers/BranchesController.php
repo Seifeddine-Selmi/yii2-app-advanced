@@ -13,6 +13,7 @@ use yii\web\Response;
 use yii\helpers\Json;
 use yii\base\Exception;
 use yii\widgets\ActiveForm;
+use yii\web\UploadedFile;
 
 /**
  * BranchesController implements the CRUD actions for Branches model.
@@ -278,5 +279,32 @@ class BranchesController extends Controller
             echo "<option value='0'>-</option>";
         }
 
+    }
+
+    /*
+     * Uploading Multiple Files With DropZone
+     *
+     */
+    public function actionUpload()
+    {
+        $fileName = 'file';
+        $uploadPath = './files';
+
+        if (isset($_FILES[$fileName])) {
+            $file = UploadedFile::getInstanceByName($fileName);
+
+            //Print file data
+            //print_r($file);
+
+            if ($file->saveAs($uploadPath . '/' . $file->name)) {
+                //Now save file data to database
+                echo Json::encode($file);
+            }
+        }else{
+            return $this->render('upload');
+        }
+
+
+        return false;
     }
 }
