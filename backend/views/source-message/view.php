@@ -28,9 +28,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'category',
+          //  'id',
+          //  'category',
             'message:ntext',
+        ],
+    ]) ?>
+
+    <?= DetailView::widget([
+        'model' => $message,
+        'attributes' => [
+          //  'id',
+           // 'language',
+            [
+                'attribute' => 'language',
+                'value' => $message->language == 'fr' ? 'French' : 'English',
+            ],
+            'translation:ntext',
         ],
     ]) ?>
 

@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use backend\models\Message;
+
 /**
  * SourceMessageController implements the CRUD actions for SourceMessage model.
  */
@@ -53,6 +55,7 @@ class SourceMessageController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'message' => Message::findOne($id)
         ]);
     }
 
@@ -65,11 +68,33 @@ class SourceMessageController extends Controller
     {
         $model = new SourceMessage();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $message = new Message();
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->category = 'app';
+            $model->save(false);
+
+            // Include message form
+            if ($message->load(Yii::$app->request->post()))
+            {
+                $message->id = $model->id;
+                $message->save();
+            }
+
+
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'The message was successfully created.');
+            }else{
+                Yii::$app->session->setFlash('error', 'There was an error creating the message.');
+            }
+
+            return $this->redirect(['index']);
+
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'message' => $message,
             ]);
         }
     }
@@ -84,11 +109,28 @@ class SourceMessageController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $message = Message::findOne($id);
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            // Include message form
+            if ($message->load(Yii::$app->request->post()))
+            {
+                $message->save();
+            }
+
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'The message was successfully updated.');
+            }else{
+                Yii::$app->session->setFlash('error', 'There was an error updating the message.');
+            }
+
+            return $this->redirect(['index']);
+
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'message' => $message,
             ]);
         }
     }
@@ -101,7 +143,22 @@ class SourceMessageController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        $messages = $model->messages;
+
+        if (!empty($messages)){
+            foreach ($messages as $msg)
+            {
+                $msg->delete();
+            }
+        }
+
+        if ($model->delete()) {
+            Yii::$app->session->setFlash('success', 'The message was deleted successfully.');
+        }else{
+            Yii::$app->session->setFlash('error', 'There was an error deleting the message.');
+        }
 
         return $this->redirect(['index']);
     }
