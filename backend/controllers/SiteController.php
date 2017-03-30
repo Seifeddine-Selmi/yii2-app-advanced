@@ -7,6 +7,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use backend\models\User as UserBackend;
+use yii\web\Cookie;
 
 /**
  * Site controller
@@ -27,7 +28,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'set-cookie', 'get-cookie'],
                         'allow' => true,
                         'roles' => ['@'],
                        /* 'matchCallback' => function ($rule, $action) {
@@ -107,5 +108,34 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    /**
+     * Setting Cookies
+     *
+     * @return string
+     */
+    public function actionSetCookie()
+    {
+        $cookie = new Cookie([
+            'name' => 'test',
+            'value' => 'test cookie value',
+        ]);
+        Yii::$app->getResponse()->getCookies()->add($cookie);
+        print_r($cookie);
+
+    }
+
+    /**
+     * Getting Cookies
+     *
+     * @return string
+     */
+    public function actionGetCookie()
+    {
+        if(Yii::$app->getRequest()->getCookies()->has('test')){
+            print_r(Yii::$app->getRequest()->getCookies()->getValue('test'));
+        }
+
     }
 }

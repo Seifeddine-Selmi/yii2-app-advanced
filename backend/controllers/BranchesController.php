@@ -88,6 +88,7 @@ class BranchesController extends Controller
     public function actionImportExcel()
     {
         $inputFile = "uploads/branches_file.xlsx";
+        $result =  [];
 
         try {
             // Load the excel file
@@ -120,15 +121,18 @@ class BranchesController extends Controller
             $branch ->branch_created_date  = $rowData[0][4];
             $branch ->branch_status        = $rowData[0][5];
             if ($branch->save()) {
-                Yii::$app->session->setFlash('success', 'The branch was successfully created.');
-
+              //  Yii::$app->session->setFlash('success', 'The branch was successfully created.');
+                $result =  [
+                    'message' => 'Success',
+                ];
             }else {
-                return $branch->getErrors();
+                $result =  [
+                    'message' => $branch->getErrors(),
+                ];
             }
-
-
         }
-        return 'Success';
+        return Json::encode($result);
+
     }
 
     /**
