@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Behavior;
 use yii\helpers\Url;
 use yii\console\Controller;
+use yii\web\Application;
 
 class CheckIfLoggedIn extends Behavior{
 
@@ -16,12 +17,14 @@ class CheckIfLoggedIn extends Behavior{
     public function events()
     {
         return [
-            Controller::EVENT_BEFORE_ACTION => 'CheckIfLoggedIn'
+            Controller::EVENT_BEFORE_ACTION => 'CheckIfLoggedIn',
+            Application::EVENT_BEFORE_REQUEST => 'ChangeLanguage',
         ];
     }
 
 
-    public function CheckIfLoggedIn(){
+    public function CheckIfLoggedIn()
+    {
 
 
         if (Yii::$app->getUser()->isGuest &&
@@ -32,5 +35,13 @@ class CheckIfLoggedIn extends Behavior{
 
     }
 
+    public function ChangeLanguage()
+    {
+
+        if(Yii::$app->getRequest()->getCookies()->has('lang')){
+            Yii::$app->language = Yii::$app->getRequest()->getCookies()->getValue('lang');
+        }
+
+    }
 
 }

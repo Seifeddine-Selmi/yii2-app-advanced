@@ -610,6 +610,13 @@ DashboardAsset::register($this);
                 Dashboard
                 <small>Control panel</small>
             </h1>
+
+            <div class="languages">
+                <?php foreach(Yii::$app->params['languages'] as $key => $language){ ?>
+                     <span class="language" id="<?= $key ?>"><?= $language ?> | </span>
+                <?php } ?>
+            </div>
+
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                 <li class="active">Dashboard</li>
