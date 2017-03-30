@@ -60,6 +60,21 @@ class BranchesSearch extends Branches
         // Add join companies for Searching Related Table Data From the GridView
         $query->joinWith('companiesCompany'); // Name of relation in Branches model getCompaniesCompany
 
+
+        // Grid View Sorting Related Table Column Data
+        $dataProvider->setSort([
+            'attributes' => [
+                'branch_name',
+                'branch_status',
+                'branch_created_date',
+                //Sorting Related Table
+                'companies_company_id' => [
+                    'asc' => ['companies.company_name'=>SORT_ASC],
+                    'desc' => ['companies.company_name'=>SORT_DESC],
+                ]
+            ]
+         ]);
+
         // grid filtering conditions
         $query->andFilterWhere([
             'branch_id' => $this->branch_id,

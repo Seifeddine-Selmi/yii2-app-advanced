@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'branch_address',
             'branch_created_date',
-            // 'branch_status',
+            'branch_status',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
