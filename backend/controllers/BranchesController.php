@@ -96,8 +96,11 @@ class BranchesController extends Controller
             $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
             $objPHPExcel = $objReader->load($inputFile);
         } catch (Exception $e) {
-           // throw new NotFoundHttpException();
-            die('Error');
+            $error = $e->getMessage();
+            print_r('<pre>');
+            print_r("Error: " . $error);
+            print_r('</pre>');
+            die;
         }
 
         // Read the excel file and insert data in the database
@@ -105,7 +108,7 @@ class BranchesController extends Controller
         $highestRow = $sheet->getHighestRow();
         $highestColumn = $sheet->getHighestColumn();
 
-
+        $data = [];
         for ($row = 1; $row <= $highestRow; $row++) {
 
             $rowData = $sheet ->rangeToArray('A'.$row. ':' .$highestColumn.$row, NULL, TRUE, FALSE);
@@ -113,25 +116,38 @@ class BranchesController extends Controller
                 continue;
             }
 
-            $branch = new Branches();
-            $branch ->branch_id            = $rowData[0][0];
-            $branch ->companies_company_id = $rowData[0][1];
-            $branch ->branch_name          = $rowData[0][2];
-            $branch ->branch_address       = $rowData[0][3];
-            $branch ->branch_created_date  = $rowData[0][4];
-            $branch ->branch_status        = $rowData[0][5];
-            if ($branch->save()) {
-              //  Yii::$app->session->setFlash('success', 'The branch was successfully created.');
+            if(!empty($rowData[0][0])) {
+
+                $excelDate = $rowData[0][4];
+                $mysqlDate = \PHPExcel_Style_NumberFormat::toFormattedString($excelDate, 'Y-m-d H:i:s');
+
+                $data[] = [$rowData[0][0], $rowData[0][1], $rowData[0][2], $rowData[0][3], $mysqlDate, $rowData[0][5]];
+            }
+
+        }
+        // Batch Insert
+        try {
+            $save = Yii::$app->db
+                ->createCommand()
+                ->batchInsert('branches', ['branch_id', 'companies_company_id', 'branch_name', 'branch_address', 'branch_created_date', 'branch_status',], $data )
+                ->execute();
+
+            if ($save) {
                 $result =  [
                     'message' => 'Success',
                 ];
-            }else {
-                $result =  [
-                    'message' => $branch->getErrors(),
-                ];
             }
+        } catch (Exception $e) {
+
+            $error = $e->getMessage();
+            $result =  [
+                'message' => $error
+            ];
         }
-        return Json::encode($result);
+
+
+
+        return Json::encode($result, JSON_PRETTY_PRINT);
 
     }
 
