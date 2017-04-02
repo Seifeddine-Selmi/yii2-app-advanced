@@ -39,14 +39,24 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
+            'class' => 'yii\web\UrlManager',
+            // Disable r=routes
             'enablePrettyUrl' => true,
+            // Disable index.php
             'showScriptName' => false,
+            // 'enableStrictParsing' => true,
             'rules' => [
+               /* '<controller:\w+>/<id:\d+>' => '<controller>/view',
+                '<controller:\w+>/<id:\w+>' => '<controller>',
+                '<controller:\w+>/<action:\w+>/<id:\w+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                '<controller>s' => '<controller>/index',
+               */
+
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];

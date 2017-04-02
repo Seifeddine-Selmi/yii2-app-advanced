@@ -49,9 +49,8 @@ function(start, end) {
 
  console.log('JSCode event');
 
-
   var date = start.format();
-      $.get('index.php?r=event/create',{'date':date},function(data){
+      $.get(document.location.origin +'/event/create',{'date':date},function(data){
             $('#modal').modal('show')
                 .find('#modalContent')
                 .html(data);
@@ -79,7 +78,7 @@ function(calEvent, jsEvent, view) {
 console.log('JSEventClick  event');
 
       var event_id = calEvent.id;
-      $.get('index.php?r=event/update',{'id':event_id},function(data){
+      $.get(document.location.origin +'/event/update',{'id':event_id},function(data){
             $('#modal').modal('show')
                 .find('#modalContent')
                 .html(data);
@@ -99,7 +98,7 @@ EOF;
 
 
       var date = start.format();
-          $.get('index.php?r=event/create',{'date':date},function(data){
+          $.get(document.location.origin +'/event/create',{'date':date},function(data){
                 $('#modal').modal('show')
                     .find('#modalContent')
                     .html(data);

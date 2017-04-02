@@ -97,11 +97,15 @@ return [
             'errorAction' => 'site/error',
         ],
         'urlManager' => [
+            'class' => 'yii\web\UrlManager',
+            // Disable r=routes
             'enablePrettyUrl' => true,
-            //'enableStrictParsing' => true,
+            // Disable index.php
             'showScriptName' => false,
+           // 'enableStrictParsing' => true,
             'rules' => [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'todo'],
+
             ],
         ],
 

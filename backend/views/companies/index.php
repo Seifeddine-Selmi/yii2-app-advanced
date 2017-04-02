@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php // echo Html::a('Create Companies', ['create'], ['class' => 'btn btn-success']) ?>
-        <?php echo Html::button('Create Companies', ['value'=>Url::to('index.php?r=companies/create'),'class' => 'btn btn-success','id'=>'modalButton']) ?>
+        <?php echo Html::button('Create Companies', ['value'=>Url::toRoute('companies/create'),'class' => 'btn btn-success','id'=>'modalButton']) ?>
 
         <?php echo Html::a('Create Companies And Branches', ['create-with-branch'], ['class' => 'btn btn-success']) ?>
 

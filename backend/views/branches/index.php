@@ -33,7 +33,7 @@ $this->params['menu'] = $this->title;
 
     <p>
         <?php //echo Html::a('Create Branches', ['create'], ['class' => 'btn btn-success']) ?>
-        <?php echo Html::button('Create Branches', ['value'=>Url::to('index.php?r=branches/create'),'class' => 'btn btn-success','id'=>'modalButton']) ?>
+        <?php echo Html::button('Create Branches', ['value'=>Url::toRoute('branches/create'),'class' => 'btn btn-success','id'=>'modalButton']) ?>
     </p>
 
 

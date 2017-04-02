@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php //echo Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-        <?php echo Html::button('Create User', ['value'=>Url::to('index.php?r=user/create'),'class' => 'btn btn-success','id'=>'modalButton']) ?>
+        <?php echo Html::button('Create User', ['value'=>Url::toRoute('user/create'),'class' => 'btn btn-success','id'=>'modalButton']) ?>
     </p>
 
     <?php
